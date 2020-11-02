@@ -20,7 +20,7 @@ class RPSPolicy:
 
 	def get_next_move(self):
 		next_action = self.move_function(self.history, self.opponent_history)
-		self.history.append(next_action)
+		self.history.append(self.convert_index_to_action(next_action))
 		return self.convert_index_to_action(next_action)
 
 	def update_opponent_history(self, opp_action):
@@ -35,6 +35,10 @@ class RPSPolicy:
 			return Action.SCISSORS
 		else:
 			return None
+
+	def reset_policy(self):
+		self.history = []
+		self.opponent_history = []
 
 def simulate_turn(action_one, action_two):
 	if action_one == action_two:
