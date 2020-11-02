@@ -58,44 +58,51 @@ def simulate_game(policy_one, policy_two, turns):
             player_two_wins += 1
     print("After simulating " + str(turns) + " turns of RPS, " + str(policy_one.name) + " won " + str(player_one_wins) + " games, " + str(policy_two.name) + " won " + str(player_two_wins) + " and " + str(draws) + " were draws")
 
-
-name_rock = "fixed_rock"
 def move_func_rock(history, opponent_history):
     return 0
 
-name_paper = "fixed_paper"
 def move_func_paper(history, opponent_history):
     return 1
 
-name_copycat = "copycat"
+def move_func_scissors(history, opponent_history):
+    return 2
+
 def move_func_copycat(history, opponent_history):
     if not opponent_history: return np.random.randint(3)	# random on the first turn
     last = opponent_history[-1]
     return last
 
-name_random = "random"
 def move_func_random(history, opponent_history):
     return np.random.randint(3)
 
-name_aggressive = "aggressive"
 def move_func_aggressive(history, opponent_history):
     if not opponent_history: return np.random.randint(3)	# random on the first turn
     last = opponent_history[-1]
     beat_last = (last + 1) % 3
     return beat_last
 
-fixed_rock_policy = RPSPolicy(name_rock, move_func_rock)
-fixed_paper_policy = RPSPolicy(name_paper, move_func_paper)
-copycat_policy = RPSPolicy(name_copycat, move_func_copycat)
-random_policy = RPSPolicy(name_random, move_func_random)
-aggressive_policy = RPSPolicy(name_aggressive, move_func_aggressive)
+def move_func_passive(history, opponent_history):
+    if not opponent_history: return np.random.randint(3)	# random on the first turn
+    last = opponent_history[-1]
+    lose_last = (last - 1) % 3
+    return lose_last
+
+fixed_rock_policy = RPSPolicy("fixed_rock", move_func_rock)
+fixed_paper_policy = RPSPolicy("fixed_paper", move_func_paper)
+fixed_scissors_policy = RPSPolicy("fixed_scissors", move_func_scissors)
+copycat_policy = RPSPolicy("copycat", move_func_copycat)
+random_policy = RPSPolicy("random", move_func_random)
+aggressive_policy = RPSPolicy("aggressive", move_func_aggressive)
+passive_policy = RPSPolicy("passive", move_func_passive)
 
 policies = [
     fixed_rock_policy,
     fixed_paper_policy,
+    fixed_scissors_policy,
     copycat_policy,
     random_policy,
     aggressive_policy,
+    passive_policy,
 ]
 
 for p1 in policies:

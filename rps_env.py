@@ -1,7 +1,7 @@
 import gym
 from gym import spaces
 from rps_policy import RPSPolicy, simulate_turn, Result, Action
-from rps_policy import fixed_rock_policy, fixed_paper_policy, copycat_policy, random_policy, aggressive_policy
+from rps_policy import policies
 import numpy as np
 
 N_DISCRETE_ACTIONS = 3
@@ -56,15 +56,6 @@ class RPSEnv(gym.Env):
     def render(self, mode='human', close=False):
         # Render the environment to the screen
         print(self.opponent_policy.opponent_history, self.opponent_policy.history)
-
-
-policies = [
-    fixed_rock_policy,
-    fixed_paper_policy,
-    copycat_policy,
-    random_policy,
-    aggressive_policy,
-]
 
 for policy in policies:
     env = RPSEnv(policy)
