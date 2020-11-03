@@ -1,10 +1,10 @@
 from enum import IntEnum
 import numpy as np
 
-class Action(IntEnum):
-    ROCK = 0
-    PAPER = 1
-    SCISSORS = 2
+# class Action(IntEnum):
+#     ROCK = 0
+#     PAPER = 1
+#     SCISSORS = 2
 
 class Result(IntEnum):
     DRAW = 0
@@ -20,7 +20,7 @@ class RPSPolicy:
 
     def get_next_move(self):
         next_action = self.move_function(self.history, self.opponent_history)
-        next_action = Action(next_action)
+        #next_action = Action(next_action)
         self.history.append(next_action)
         return next_action
 
@@ -105,7 +105,7 @@ policies = [
     passive_policy,
 ]
 
-for p1 in policies:
-    for p2 in policies:
-        if p1 == p2: continue
-        simulate_game(p1, p2, 100)
+# for p1 in policies:
+#     for p2 in policies:
+#         if p1 == p2: continue
+#         simulate_game(p1, p2, 100)
