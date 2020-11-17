@@ -25,7 +25,7 @@ multitask_env = gym.make('rps-multitask-v0', opp_policies=opp_policies)
 test_multitask_env = gym.make('rps-multitask-v0', opp_policies=opp_policies)
 
 
-eval_callback = EvalCallback(test_multitask_env, eval_freq=10, deterministic=True, render=False)
+eval_callback = EvalCallback(test_multitask_env, eval_freq=1000, deterministic=True, render=False)
 
 
 policy_kwargs = dict(activation_fn=th.nn.ReLU, net_arch=[8,8])
@@ -51,8 +51,8 @@ plt.xlabel("Opponent Policy")
 plt.ylabel("Average Simulated Reward")
 plt.title("Single Agent Trained (Expanded State Space): Average Simulated Reward vs Opponent Policy")
 plt.xticks(x_pos, x)
-plt.show()
-
+#plt.show()
+plt.savefig('multitask.png')
 
 
 # model = PPO2("MlpLstmPolicy", env, nminibatches=1, policy_kwargs=policy_kwargs, n_steps=n_steps, batch_size=batch_size, n_epochs=n_epochs, verbose=0)

@@ -9,3 +9,8 @@ register(
     id='rps-multitask-v0',
     entry_point='myenvs.envs:RPSEnvMultitask',
 )
+
+register(
+    id='rps-meta-v0',
+    entry_point='myenvs.envs:RPSEnvMeta',
+)
