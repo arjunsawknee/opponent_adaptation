@@ -4,10 +4,11 @@ import numpy as np
 
 N_DISCRETE_ACTIONS = 3
 DENSE_DIM = 10
+MAX_GAMES = 20
 
 class RPSEnvMeta(gym.Env):
     """Custom Environment that follows gym interface"""
-    def __init__(self, opp_repeat_length=5, max_games=20):
+    def __init__(self, opp_repeat_length=5, max_games=MAX_GAMES):
         super(RPSEnvMeta, self).__init__()
         self.games_count = 0
         self.policy_count = 0
@@ -16,7 +17,7 @@ class RPSEnvMeta(gym.Env):
         self.opponent_action_counter = 0
 
         self.action_space = spaces.Discrete(N_DISCRETE_ACTIONS)
-        self.observation_space = spaces.MultiDiscrete([N_DISCRETE_ACTIONS, N_DISCRETE_ACTIONS])
+        self.observation_space = spaces.MultiDiscrete([MAX_GAMES+1])
         self.max_games = max_games
 
         self.fixed_opponent_policy = None # used when testing
@@ -31,11 +32,11 @@ class RPSEnvMeta(gym.Env):
         opponent_action = self.opponent_policy[self.opponent_action_counter]
         self.opponent_action_counter = (self.opponent_action_counter + 1) % self.opponent_repeat_length
 
-        obs = np.array([opponent_action, my_action])
         reward = self.get_reward(my_action, opponent_action)
         self.games_count += 1
+        obs = np.array([self.games_count])
         done = (self.games_count == self.max_games)
-
+        #print(self.games_count, my_action, opponent_action, reward)
         return obs, reward, done, {}
 
     def reset(self):
@@ -46,7 +47,7 @@ class RPSEnvMeta(gym.Env):
         if self.fixed_opponent_policy is not None: self.opponent_policy = self.fixed_opponent_policy
         self.opponent_action_counter = 0
         self.render()
-        return np.array([0, 0])
+        return np.array([self.games_count])
 
     def render(self, mode='human', close=False):
         # Render the environment to the screen

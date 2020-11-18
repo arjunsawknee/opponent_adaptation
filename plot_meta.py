@@ -44,8 +44,8 @@ colors = ["orange", "gray"]
 
 for file, color in zip(files, colors):
     for x,y in zip(data[file]["x"], data[file]["y"]):
-        x, y = x[::2], y[::2]
-        y = smooth(y, 0.7)
+        x, y = x[:10], y[:10]
+        y = smooth(y, 0.0)
         plt.plot(x, y, color=color)
 
 plt.xlabel("Timesteps")

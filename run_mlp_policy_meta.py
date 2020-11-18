@@ -2,7 +2,7 @@ import gym
 import myenvs
 import torch as th
 
-from stable_baselines3 import PPO
+from stable_baselines3 import PPO, DQN
 from stable_baselines3.common.callbacks import EvalCallback
 from rps_policy import policies
 import numpy as np
@@ -28,25 +28,26 @@ test_meta_env = gym.make('rps-meta-v0')
 eval_callback = EvalCallback(test_meta_env, eval_freq=1000, deterministic=True, render=False)
 
 
-policy_kwargs = dict(activation_fn=th.nn.ReLU, net_arch=[8,8])
-n_steps, batch_size, n_epochs =  20, 20, 10
+policy_kwargs = dict(activation_fn=th.nn.ReLU, net_arch=[30,30])
+n_steps, batch_size, n_epochs =  50, 50, 10
 
 model = PPO("MlpPolicy", meta_env, policy_kwargs=policy_kwargs, n_steps=n_steps, batch_size=batch_size, n_epochs=n_epochs, verbose=0)
-model.learn(total_timesteps=20000, callback=eval_callback, meta_learn=False)        # no meta learning
-#model.learn(total_timesteps=20000, callback=eval_callback, meta_learn=True)     # meta learning
+#model.learn(total_timesteps=100000, callback=eval_callback, meta_learn=False)        # no meta learning
+model.learn(total_timesteps=100000, callback=eval_callback, meta_learn=True)     # meta learning
 
 opponent_policies = [
     np.array([0,1,2,0,1]),
     np.array([1,2,2,1,0]),
     np.array([2,1,0,0,0]),
-    np.array([2,2,1,1,0]),
-    np.array([0,1,2,2,2]),
+    #np.array([2,2,1,1,0]),
+    #np.array([0,1,2,2,2]),
 ]
-eval_callback_test = EvalCallback(test_meta_env, eval_freq=50, deterministic=True, render=False)
+eval_callback_test = EvalCallback(test_meta_env, eval_freq=500, deterministic=True, render=False)
 for opponent_policy in opponent_policies:
     meta_env.fixed_opponent_policy = opponent_policy
+    test_meta_env.fixed_opponent_policy = opponent_policy
     model.set_env(meta_env)
-    model.learn(total_timesteps=500, callback=eval_callback_test, meta_learn=False)
+    model.learn(total_timesteps=2000, callback=eval_callback_test, meta_learn=False)
 
 
 
